@@ -9,27 +9,73 @@ public class LinkedList<E> extends AbstractList<E> {
 
     @Override
     public E get(int index) {
-        return null;
+        return node(index).elements;
     }
 
     @Override
     public E set(int index, E element) {
-        return null;
+        Node<E> node = node(index);
+        E prev = node.elements;
+        node.elements = element;
+        return prev;
     }
 
     @Override
     public void add(int index, E element) {
+        if (index == 0) {
+            first = new Node<>(element, first);
+        } else {
+            Node<E> prev = node(index - 1);
+            prev.next = new Node<>(element, prev.next);
+        }
 
+        size++;
     }
 
     @Override
     public E remove(int index) {
-        return null;
+        if (index == 0) {
+            Node<E> node = first;
+            first = node.next;
+            return node.elements;
+        } else {
+            Node<E> prev = node(index - 1);
+            Node<E> node = prev.next;
+            prev.next = node.next;
+            return node.elements;
+        }
+
     }
 
     @Override
     public int indexOf(E element) {
-        return 0;
+
+        Node<E> node = first;
+        if (element == null) {
+            for(int i = 0; i < size; i++) {
+                if (node.elements == element) return i;
+
+                node = node.next;
+            }
+
+        } else {
+            for(int i = 0; i < size; i++) {
+                if (node.elements == element) return i;
+
+                node = node.next;
+            }
+        }
+        return ELEMENT_NOT_FOUND;
+    }
+
+    public Node<E> node(int index) {
+        rangeCheck(index);
+
+        Node<E> node = first;
+        for(int i = 0; i < index; i++) {
+            node = node.next;
+        }
+        return node;
     }
 
     private static class Node<E> {
